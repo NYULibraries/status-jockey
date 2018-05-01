@@ -1,5 +1,5 @@
 const rewire = require('rewire');
-const checkArguments = rewire('../index.js').__get__("checkArguments");
+const checkArguments = rewire('../../index.js').__get__("checkArguments");
 
 describe('checkArguments', () => {
   it('should check first argument (params) is an object', () => {

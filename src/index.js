@@ -5,10 +5,11 @@ const { applyFilter } = "./lib/filters.js";
 
 module.exports = function statusJockey(params, config, key) {
   checkArguments(arguments);
-
+  const { limit, page_id } = params;
   return (
     fetchIncidents(params)
-      .then(data => filterIncidents(data, config))
+      .then(data => data.slice(0, limit)) // limit param optional.
+      .then(data => filterIncidents(data, config[page_id]))
   );
 };
 
@@ -38,8 +39,8 @@ function checkArguments(...args) {
   }
 }
 
-function fetchIncidents(params) {
-
+function fetchIncidents({ page_id, type }) {
+  return BASE_API_URL + page_id;
 }
 
 function filterIncidents(data, config) {
