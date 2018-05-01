@@ -45,7 +45,14 @@ function fetchIncidents(params) {
 function filterIncidents(data, config) {
   if (!config) { return data; }
 
-  Object.keys(config).forEach(filterKey => {
-    applyFilter(filterKey, config);
+  const filterOrder = [
+    'filterByStatus',
+    'filterbyComponents',
+    'keys',
+    'maps'
+  ];
+  
+  filterOrder.forEach(filterKey => {
+    applyFilter(filterKey, data, config);
   });
 }
