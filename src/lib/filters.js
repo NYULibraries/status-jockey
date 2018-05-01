@@ -37,7 +37,7 @@ function applyComponentsFilter(data, components) {
 }
 
 function applyKeysFilter(data, keys) {
- return data.map(incident =>
+  return data.map(incident =>
     Object.keys(incident)
       .filter(key => keys.includes(key))
       .reduce((obj, key) => ({...obj, [key]: incident[key]}), {})
