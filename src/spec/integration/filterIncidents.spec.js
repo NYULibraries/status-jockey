@@ -19,7 +19,7 @@ describe('filterIncidents', () => {
       // only return incidents from the following components. Otherwise, return all.
       filterByComponents: ["EZProxy"],
       // only returns the following keys
-      keys: ["id", "message", "incident_link", "created_at", "status", "shortlink"],
+      keys: ["id", "message", "incident_link", "created_at", "status", "hashtags"],
       // map Statuspage.io response key values to custom key values. Non-mapped values in keys are given the default key.
       maps: {
         // can map each entry to new key based on string identifying the mapped key
@@ -41,7 +41,7 @@ describe('filterIncidents', () => {
         },
         hashtags: ({ incident_updates }) => {
           const body = incident_updates[0].body;
-          return body ? body.match(/#\w+/g).map(v => v.replace('#', '')) : [];
+          return body && body.match(/#\w+/g) ? body.match(/#\w+/g).map(v => v.replace('#', '')) : [];
         }
       }
     };

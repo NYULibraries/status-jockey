@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test:debugger": "JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json yarn babel-node --inspect --debug-brk node_modules/.bin/jasmine", 
     "coverage": "istanbul cover jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
     "babelify": "babel src --out-dir dist --ignore *.spec.js",
     "build": "BABEL_ENV=production yarn babelify",
