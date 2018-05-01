@@ -45,7 +45,34 @@ function applyKeysFilter(data, keys) {
 }
 
 function applyMaps(data, maps) {
-  return data;
+  return data.map(incident => {
+    const remappedKeys = new Set();
+    const mapped =
+      Object.keys(maps)
+        .reduce((obj, mapKey) => {
+          const mapper = maps[mapKey];
+
+          let mapVal = null;
+          if (typeof mapper === 'string') {
+            // get corresponding mapper value from incident
+            mapVal = incident[mapper];
+            // delete from original incident object
+            remappedKeys.add(mapper);
+          } else if (typeof mapper === 'function') {
+            // invoke mapper function with incident as argument
+            mapVal = mapper(incident);
+          }
+
+          return {...obj, [mapKey]: mapVal};
+        }, incident);
+
+    // delete all remapped keys
+    remappedKeys.forEach(key => {
+      delete mapped[key];
+    });
+
+    return mapped;
+  });
 }
 
 module.exports.applyFilter = applyFilter;

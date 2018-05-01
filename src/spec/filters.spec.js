@@ -49,3 +49,27 @@ describe('applyKeysFilter', () => {
     });
   });
 });
+
+describe('applyMaps', () => {
+  const { applyMaps } = filterFunctions;
+  it('should work with mapping strings', () => {
+    const mockData = [{
+      body: "this is a body",
+      shortlink: "http://url.com",
+      otherField: ['a', 'b', 'c']
+    }];
+
+    const maps = {
+      message: "body",
+      incident_link: "shortlink",
+    };
+
+    const mappedData = [{
+      message: "this is a body",
+      incident_link: "http://url.com",
+      otherField: ['a', 'b', 'c']
+    }];
+
+    expect(applyMaps(mockData, maps)).toEqual(mappedData);
+  });
+});
