@@ -1,6 +1,7 @@
 'use strict';
 
 const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
+const { applyFilter } = "./lib/filters.js";
 
 module.exports = function statusJockey(params, config, key) {
   checkArguments(arguments);
@@ -43,4 +44,8 @@ function fetchIncidents(params) {
 
 function filterIncidents(data, config) {
   if (!config) { return data; }
+
+  Object.keys(config).forEach(filterKey => {
+    applyFilter(filterKey, config);
+  });
 }

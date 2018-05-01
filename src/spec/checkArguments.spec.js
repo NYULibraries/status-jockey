@@ -1,12 +1,7 @@
 const rewire = require('rewire');
-const statusJockeyRewire = rewire('../index.js');
+const checkArguments = rewire('../index.js').__get__("checkArguments");
 
 describe('checkArguments', () => {
-  let checkArguments;
-  beforeEach(() => {
-    checkArguments = statusJockeyRewire.__get__("checkArguments");
-  });
-
   it('should check first argument (params) is an object', () => {
     const error = [
       TypeError,
