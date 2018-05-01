@@ -2,12 +2,14 @@
 
 const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
 const { applyFilter } = require("./lib/filters.js");
+const { get: axiosGet } = require('axios');
 
 module.exports = function statusJockey(params, config, key) {
   checkArguments(arguments);
   const { limit, page_id } = params;
   return (
     fetchIncidents(params)
+      .then(response => response.data )
       .then(data => data.slice(0, limit)) // limit param optional.
       .then(data => filterIncidents(data, config[page_id]))
   );
@@ -40,7 +42,7 @@ function checkArguments(...args) {
 }
 
 function fetchIncidents({ page_id, type }) {
-  return BASE_API_URL + page_id;
+  return axiosGet(BASE_API_URL + page_id);
 }
 
 function filterIncidents(data, config) {

@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
-    "test:debugger": "JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json yarn babel-node --inspect --debug-brk node_modules/.bin/jasmine", 
+    "test:debugger": "JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json yarn babel-node --inspect --debug-brk node_modules/.bin/jasmine",
     "coverage": "istanbul cover jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
     "babelify": "babel src --out-dir dist --ignore *.spec.js",
     "build": "BABEL_ENV=production yarn babelify",
@@ -28,6 +28,10 @@
     "istanbul": "^0.4.5",
     "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
+    "nock": "^9.2.5",
     "rewire": "^4.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
   }
 }
