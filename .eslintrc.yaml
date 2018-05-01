@@ -1,0 +1,12 @@
+extends: eslint:recommended
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+rules:
+  semi: 2
+  no-unused-vars:
+  - warn
+  no-console: 0
+env:
+  jasmine: true
+  node: true

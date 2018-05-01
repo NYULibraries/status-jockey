@@ -36,12 +36,16 @@ function applyComponentsFilter(data, components) {
   );
 }
 
-function applyKeysFilter(data, config) {
-
+function applyKeysFilter(data, keys) {
+ return data.map(incident =>
+    Object.keys(incident)
+      .filter(key => keys.includes(key))
+      .reduce((obj, key) => ({...obj, [key]: incident[key]}), {})
+  );
 }
 
-function applyMaps(data, config) {
-
+function applyMaps(data, maps) {
+  return data;
 }
 
 module.exports.applyFilter = applyFilter;

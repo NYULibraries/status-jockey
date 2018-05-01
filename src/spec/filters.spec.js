@@ -44,7 +44,7 @@ describe('applyKeysFilter', () => {
   const { applyKeysFilter } = filterFunctions;
   it('should only include specified keys in each incident', () => {
     const keys = ["name", "status", "shortlink"];
-    applyKeysFilter(keys).forEach(incident => {
+    applyKeysFilter(data, keys).forEach(incident => {
       expect(Object.keys(incident)).toEqual(keys);
     });
   });
