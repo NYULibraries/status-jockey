@@ -50,6 +50,7 @@ function applyMaps(data, maps) {
     const mapped =
       Object.keys(maps)
         .reduce((obj, mapKey) => {
+          // string or a function
           const mapper = maps[mapKey];
 
           let mapVal = null;

@@ -72,4 +72,29 @@ describe('applyMaps', () => {
 
     expect(applyMaps(mockData, maps)).toEqual(mappedData);
   });
+
+  it('should work with mapping with functions', () => {
+    const mockData = [{
+      id: 123456,
+      body: "this is a body",
+      shortlink: "http://url.com",
+      otherField: ['a', 'b', 'c']
+    }];
+
+    const maps = {
+      message: ({ body }) => body + "!",
+      incident_link: ({id}) => `http://mysite/${id}`,
+    };
+
+    const mappedData = [{
+      id: 123456,
+      body: "this is a body",
+      shortlink: "http://url.com",
+      message: "this is a body!",
+      incident_link: "http://mysite/123456",
+      otherField: ['a', 'b', 'c']
+    }];
+
+    expect(applyMaps(mockData, maps)).toEqual(mappedData);
+  });
 });

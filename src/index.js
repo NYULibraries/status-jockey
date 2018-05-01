@@ -48,10 +48,10 @@ function filterIncidents(data, config) {
   const filterOrder = [
     'filterByStatus',
     'filterbyComponents',
-    'keys',
-    'maps'
+    'maps',
+    'keys'
   ];
-  
+
   filterOrder.forEach(filterKey => {
     applyFilter(filterKey, data, config);
   });
