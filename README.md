@@ -1,6 +1,6 @@
 # StatusJockey
 
-[![Coverage Status](https://coveralls.io/repos/github/NYULibraries/statusjockey/badge.svg?branch=development)](https://coveralls.io/github/NYULibraries/statusjockey?branch=development)
+[![Coverage Status](https://coveralls.io/repos/github/NYULibraries/statusjockey/badge.svg?branch=master)](https://coveralls.io/github/NYULibraries/statusjockey?branch=master)
 
 Incidents response filter for the [Statuspage.io Incidents API](http://doers.statuspage.io/api/v1/incidents/)
 
