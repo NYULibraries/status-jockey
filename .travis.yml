@@ -1,0 +1,5 @@
+language: node_js
+node_js:
+  - "node"
+  - "6.10.3" # AWS Lambda compatibility
+cache: yarn
