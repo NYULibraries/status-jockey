@@ -4,9 +4,8 @@
   "description": "Response filter for Statuspage.io API",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
-    "test:debugger": "JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json yarn babel-node --inspect --debug-brk node_modules/.bin/jasmine",
-    "coverage": "istanbul cover jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test": "nyc --reporter=lcov babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test:debugger": "babel-node --inspect --debug-brk node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json ",
     "babelify": "babel src --out-dir dist --ignore *.spec.js",
     "build": "BABEL_ENV=production yarn babelify",
     "prepare": "yarn build"
@@ -23,15 +22,21 @@
   "homepage": "https://github.com/NYULibraries/statusjockey",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-istanbul": "^4.1.6",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "istanbul": "^0.4.5",
     "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
     "nock": "^9.2.5",
+    "nyc": "^11.7.1",
     "rewire": "^4.0.1"
   },
   "dependencies": {
     "axios": "^0.18.0"
+  },
+  "nyc": {
+    "exclude": [
+      "src/spec/**/*"
+    ]
   }
 }
