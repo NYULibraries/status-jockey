@@ -5,8 +5,9 @@ const { applyFilter } = require("./lib/filters.js");
 const { get: axiosGet } = require('axios');
 
 module.exports = function statusJockey(params, config, key) {
-  checkArguments(arguments);
+  checkArguments(params, config, key);
   const { limit, page_id } = params;
+
   return (
     fetchIncidents(params, key)
       .then(({ data }) => {
@@ -17,7 +18,7 @@ module.exports = function statusJockey(params, config, key) {
 };
 
 function checkArguments(...args) {
-  const [params, config, key] = [...args];
+  const [params, config, key] = args;
 
   if (params === null || typeof params !== 'object') {
     throw new TypeError(
@@ -42,8 +43,7 @@ function checkArguments(...args) {
   }
 }
 
-function fetchIncidents({ page_id, type }, token) {
-
+function fetchIncidents({ page_id, type }, key) {
   let requestEndpoint;
   switch (type) {
     case "all":
@@ -62,7 +62,7 @@ function fetchIncidents({ page_id, type }, token) {
   const url = BASE_API_URL + `${page_id}/${requestEndpoint}`;
 
   return axiosGet(url, {
-    headers: { Authorization: `OAuth ${token}`}
+    headers: { Authorization: `OAuth ${key}`}
   });
 }
 

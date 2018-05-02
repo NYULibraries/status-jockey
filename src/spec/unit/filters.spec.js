@@ -65,6 +65,8 @@ describe('applyMaps', () => {
     };
 
     const mappedData = [{
+      body: "this is a body",
+      shortlink: "http://url.com",
       message: "this is a body",
       incident_link: "http://url.com",
       otherField: ['a', 'b', 'c']
