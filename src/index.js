@@ -9,9 +9,10 @@ module.exports = function statusJockey(params, config, key) {
   const { limit, page_id } = params;
   return (
     fetchIncidents(params, key)
-      .then(response => response.data )
-      .then(data => data.slice(0, limit)) // limit param optional.
-      .then(data => filterIncidents(data, config[page_id]))
+      .then(({ data }) => {
+        data = data.slice(0, limit); // limit param optional.
+        return filterIncidents(data, config[page_id]);
+      })
   );
 };
 
@@ -41,16 +42,32 @@ function checkArguments(...args) {
   }
 }
 
-function fetchIncidents({ page_id, type }, key) {
-  const url = BASE_API_URL + page_id + '/incidents.json';
+function fetchIncidents({ page_id, type }, token) {
+
+  let requestEndpoint;
+  switch (type) {
+    case "all":
+      requestEndpoint = "incidents.json";
+      break;
+    case "unresolved":
+      requestEndpoint = "incidents/unresolved.json";
+      break;
+    case "scheduled":
+      requestEndpoint = "incidents/scheduled.json";
+      break;
+    default:
+      requestEndpoint = "incidents.json";
+  }
+
+  const url = BASE_API_URL + `${page_id}/${requestEndpoint}`;
 
   return axiosGet(url, {
-    headers: { Authorization: `OAuth ${key}`}
+    headers: { Authorization: `OAuth ${token}`}
   });
 }
 
-function filterIncidents(data, config) {
-  if (!config) { return data; }
+function filterIncidents(data, pageConfig) {
+  if (!pageConfig) { return data; }
 
   const filterOrder = [
     'filterByStatus',
@@ -61,7 +78,7 @@ function filterIncidents(data, config) {
 
   return filterOrder.reduce(
     (filteredData, filter) =>
-      applyFilter(filter, filteredData, config),
+      applyFilter(filter, filteredData, pageConfig),
     data
   );
 }
