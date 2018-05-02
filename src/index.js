@@ -8,7 +8,7 @@ module.exports = function statusJockey(params, config, key) {
   checkArguments(arguments);
   const { limit, page_id } = params;
   return (
-    fetchIncidents(params)
+    fetchIncidents(params, key)
       .then(response => response.data )
       .then(data => data.slice(0, limit)) // limit param optional.
       .then(data => filterIncidents(data, config[page_id]))
@@ -41,8 +41,12 @@ function checkArguments(...args) {
   }
 }
 
-function fetchIncidents({ page_id, type }) {
-  return axiosGet(BASE_API_URL + page_id);
+function fetchIncidents({ page_id, type }, key) {
+  const url = BASE_API_URL + page_id + '/incidents.json';
+
+  return axiosGet(url, {
+    headers: { Authorization: `OAuth ${key}`}
+  });
 }
 
 function filterIncidents(data, config) {
@@ -55,7 +59,9 @@ function filterIncidents(data, config) {
     'keys'
   ];
 
-  filterOrder.forEach(filterKey => {
-    data = applyFilter(filterKey, data, config);
-  });
+  return filterOrder.reduce(
+    (filteredData, filter) =>
+      applyFilter(filter, filteredData, config),
+    data
+  );
 }

@@ -45,8 +45,6 @@ function applyKeysFilter(data, keys) {
 }
 
 function applyMaps(data, maps) {
-  debugger;
-
   return data.map(incident => {
     const remappedKeys = new Set();
     const mapped =
