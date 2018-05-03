@@ -2,8 +2,7 @@ const rewire = require('rewire');
 const filterIncidents = rewire('../../index.js').__get__("filterIncidents");
 
 describe('filterIncidents', () => {
-  const pageConfig = require('../fixtures/config.fixture.js').abcd1234;
-
+  const pageConfig = require('../fixtures/config.fixture.js');
   const expectedResult = [
     {
       status: 'red',
@@ -57,6 +56,16 @@ describe('filterIncidents', () => {
   it('should be composed of pure functions', () => {
     data = Object.freeze(data);
     expect(() => filterIncidents(data, pageConfig)).not.toThrow();
+  });
+
+  it('should work without all config parameters defined', () => {
+    const config = { keys: ["id", "status"] };
+    expect(() => filterIncidents(data, config)).not.toThrow();
+  });
+
+  it('should not throw error with invalid filters defined', () => {
+    const config = { keysX: ["id", "status"] };
+    expect(() => filterIncidents(data, config)).not.toThrow();
   });
 
 });

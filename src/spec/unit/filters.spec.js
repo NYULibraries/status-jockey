@@ -1,5 +1,4 @@
 const rewire = require('rewire');
-const { applyFilter } = require('../../lib/filters.js');
 const allFilters = rewire('../../lib/filters.js');
 const data = require('../fixtures/statuspage-all.fixture.json');
 

@@ -30,8 +30,6 @@ yarn add statusjockey
 ```js
 // statusJockeyConfig.js
 modules.export = {
-  // identify page_id that follows the configuration
-  abcd1234: {
     // only return incidents with the following statuses.
     // Otherwise, return all.
     filterByStatus: ["investigating", "completed"],
@@ -44,7 +42,7 @@ modules.export = {
       title: "name",
       incident_link: "shortlink",
       // or based on a function which takes the incident item object
-      message: ({ incident_updates }) => incident_updates[0].body,
+      most_recent_message: ({ incident_updates }) => incident_updates[0].body,
       status: ({ status }) => {
         switch (status) {
           case "investigating":
@@ -64,10 +62,7 @@ modules.export = {
     },
     // Only return the following keys for each incident
     // Non-mapped keys are given their default values.
-    keys: ["id", "last_message", "incident_link", "created_at", "status", "hashtags"],
-  },
-  wxyz9876: {
-    // ...
+    keys: ["id", "most_recent_message", "incident_link", "created_at", "status", "hashtags"],
   }
 };
 ```
@@ -77,14 +72,16 @@ modules.export = {
 // main.js
 const statusjockey = require('statusjockey');
 const API_KEY = process.env["STATUSPAGE_API_KEY"];
-const config = require('./statusJockeyConfig.js')
+const pageFiltersConfig = require('./statusJockeyConfig.js')
 
 statusjockey(
+  // perform a fetch with the page id abcd1234, with only scheduled responses
+  // limit to the most recent response
   { page_id: 'abcd1234', type: 'scheduled', limit: 1 },
-  config,
+  pageFiltersConfig,
   API_KEY
 ) // returns a Promise
-.then(data => {
+.then(incidentsList => { // incidentsList is an array of incidents
   // do stuff
 });
 ```
