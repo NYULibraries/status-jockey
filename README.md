@@ -1,4 +1,4 @@
-# StatusJockey
+# status-jockey
 
 [![Coverage Status](https://coveralls.io/repos/github/NYULibraries/statusjockey/badge.svg?branch=master)](https://coveralls.io/github/NYULibraries/statusjockey?branch=master)
 
