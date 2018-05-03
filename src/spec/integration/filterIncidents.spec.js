@@ -58,4 +58,14 @@ describe('filterIncidents', () => {
     expect(() => filterIncidents(data, pageConfig)).not.toThrow();
   });
 
+  it('should work without all config parameters defined', () => {
+    const config = { keys: ["id", "status"] };
+    expect(() => filterIncidents(data, config)).not.toThrow();
+  });
+
+  it('should not throw error with invalid filters defined', () => {
+    const config = { keysX: ["id", "status"] };
+    expect(() => filterIncidents(data, config)).not.toThrow();
+  });
+
 });
