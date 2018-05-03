@@ -1,4 +1,4 @@
-function applyFilter(filterKey, data, config) {
+function applyFilter(filterKey, data, filterConfig) {
     const filters = {
       filterByStatus: applyStatusFilter,
       filterByComponents: applyComponentsFilter,
@@ -6,11 +6,7 @@ function applyFilter(filterKey, data, config) {
       maps: applyMaps,
     };
 
-    return filters[filterKey] &&
-      // if key matches named filter
-      filters[filterKey](data, config[filterKey]) ||
-      // else, return the original data
-      data;
+    return filters[filterKey](data, filterConfig);
 }
 
 function applyStatusFilter(data, statuses) {

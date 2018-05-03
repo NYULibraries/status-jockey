@@ -2,8 +2,7 @@ const rewire = require('rewire');
 const filterIncidents = rewire('../../index.js').__get__("filterIncidents");
 
 describe('filterIncidents', () => {
-  const pageConfig = require('../fixtures/config.fixture.js').abcd1234;
-
+  const pageConfig = require('../fixtures/config.fixture.js');
   const expectedResult = [
     {
       status: 'red',

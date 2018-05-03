@@ -6,13 +6,13 @@ const { get: axiosGet } = require('axios');
 
 module.exports = function statusJockey(params, config, key) {
   checkArguments(params, config, key);
-  const { limit, page_id } = params;
+  const { limit, page_id, type } = params;
 
   return (
-    fetchIncidents(params, key)
+    fetchIncidents({ page_id, type}, key)
       .then(({ data }) => {
         data = data.slice(0, limit); // limit param optional.
-        return filterIncidents(data, config[page_id]);
+        return filterIncidents(data, config);
       })
   );
 };
@@ -76,9 +76,12 @@ function filterIncidents(data, pageConfig) {
     'keys'
   ];
 
-  return filterOrder.reduce(
-    (filteredData, filter) =>
-      applyFilter(filter, filteredData, pageConfig),
+  return filterOrder.reduce((filteredData, filterKey) => {
+      const filterConfig = pageConfig[filterKey];
+      return filterConfig ?
+        applyFilter(filterKey, filteredData, filterConfig) :
+        filteredData;
+    },
     data
   );
 }
