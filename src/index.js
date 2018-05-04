@@ -79,8 +79,8 @@ function filterIncidents(data, pageConfig) {
   return filterOrder.reduce((filteredData, filterKey) => {
       const filterConfig = pageConfig[filterKey];
       return filterConfig ?
-        applyFilter(filterKey, filteredData, filterConfig) :
-        filteredData;
+        applyFilter(filterKey, filteredData, filterConfig)
+        : filteredData;
     },
     data
   );

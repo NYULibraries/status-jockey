@@ -2,6 +2,7 @@ function applyFilter(filterKey, data, filterConfig) {
     const filters = {
       filterByStatus: applyStatusFilter,
       filterByComponents: applyComponentsFilter,
+      customFilter: applyCustomFilter,
       keys: applyKeysFilter,
       maps: applyMaps,
     };
@@ -14,19 +15,16 @@ function applyStatusFilter(data, statuses) {
 }
 
 function applyComponentsFilter(data, components) {
-  return data.filter(incident =>
-    incident.incident_updates && // in case not an array
-    incident.incident_updates.find(
-      update =>
+  return data.filter(({ incident_updates }) =>
+    incident_updates.find(
+      ({ affected_components }) =>
       // first check if null matches
-      components.includes(update.affected_components) || (
-        // if not null, then...
-        update.affected_components && (
-          // if an object, check if name matches
-          update.affected_components.find(component => components.includes(component.name)) ||
-          // or check if code matches
-          update.affected_components.find(component => components.includes(component.code))
-        )
+      components.includes(affected_components) ||
+      affected_components && (
+        // if an array, check if name matches one of the affected components
+        affected_components.find(
+          ({ name, code }) => components.includes(name) ||
+                              components.includes(code))
       )
     )
   );
@@ -58,6 +56,10 @@ function applyMaps(data, maps) {
         return {...obj, [mapKey]: mapVal};
       }, incident);
   });
+}
+
+function applyCustomFilter(data, filterFunction) {
+  return data.filter(filterFunction);
 }
 
 module.exports.applyFilter = applyFilter;
