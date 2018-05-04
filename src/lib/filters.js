@@ -1,47 +1,27 @@
-function applyFilter(filterKey, data, filterConfig) {
-    const filters = {
-      filterByStatus: applyStatusFilter,
-      filterByComponents: applyComponentsFilter,
-      keys: applyKeysFilter,
-      maps: applyMaps,
-    };
+const applyStatusFilter = (data, statuses) =>
+  data.filter(({ status }) => statuses.includes(status));
 
-    return filters[filterKey](data, filterConfig);
-}
-
-function applyStatusFilter(data, statuses) {
-  return data.filter(({ status }) => statuses.includes(status));
-}
-
-function applyComponentsFilter(data, components) {
-  return data.filter(incident =>
-    incident.incident_updates && // in case not an array
-    incident.incident_updates.find(
-      update =>
-      // first check if null matches
-      components.includes(update.affected_components) || (
-        // if not null, then...
-        update.affected_components && (
-          // if an object, check if name matches
-          update.affected_components.find(component => components.includes(component.name)) ||
-          // or check if code matches
-          update.affected_components.find(component => components.includes(component.code))
-        )
+const applyComponentsFilter = (data, components) =>
+  data.filter(({ incident_updates }) =>
+    incident_updates.find(({ affected_components }) =>
+      components.includes(affected_components) || // first check if null matches
+      affected_components && // if an array, check if name matches one of the affected components
+      affected_components.find(({ name, code }) =>
+        components.includes(name) ||
+        components.includes(code)
       )
     )
   );
-}
 
-function applyKeysFilter(data, keys) {
-  return data.map(incident =>
+const applyKeysFilter = (data, keys) =>
+  data.map(incident =>
     Object.keys(incident)
       .filter(key => keys.includes(key))
       .reduce((obj, key) => ({...obj, [key]: incident[key]}), {})
   );
-}
 
-function applyMaps(data, maps) {
-  return data.map(incident => {
+const applyMaps = (data, maps) =>
+  data.map(incident => {
     return Object.keys(maps).reduce((obj, mapKey) => {
         // string or a function
         const mapper = maps[mapKey];
@@ -58,6 +38,15 @@ function applyMaps(data, maps) {
         return {...obj, [mapKey]: mapVal};
       }, incident);
   });
-}
 
-module.exports.applyFilter = applyFilter;
+const applyCustomFilter = (data, filterFunction) =>
+  data.filter(filterFunction);
+
+module.exports.applyFilter = (filterKey, data, filterConfig) =>
+  ({
+    filterByStatus: applyStatusFilter,
+    filterByComponents: applyComponentsFilter,
+    customFilter: applyCustomFilter,
+    keys: applyKeysFilter,
+    maps: applyMaps,
+  })[filterKey](data, filterConfig);
