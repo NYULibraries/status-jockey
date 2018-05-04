@@ -4,18 +4,24 @@ const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
 const { applyFilter } = require("./lib/filters.js");
 const { get: axiosGet } = require('axios');
 
-module.exports = function statusJockey(params, config, key) {
-  checkArguments(params, config, key);
-  const { limit, page_id, type } = params;
+const ORDERED_FILTER_EXECUTION_LIST = Object.freeze([
+  'filterByStatus',
+  'filterbyComponents',
+  'customFilter',
+  'maps',
+  'keys'
+]);
 
-  return (
-    fetchIncidents({ page_id, type}, key)
-      .then(({ data }) => {
-        data = data.slice(0, limit); // limit param optional.
-        return filterIncidents(data, config);
-      })
-  );
-};
+const filterIncidents =
+  (data, pageConfig) =>
+    pageConfig ?
+      ORDERED_FILTER_EXECUTION_LIST
+        .reduce((filteredData, filterKey) =>
+          pageConfig[filterKey] ?
+            applyFilter(filterKey, filteredData, pageConfig[filterKey])
+            : filteredData
+        , data)
+      : data;
 
 function checkArguments(...args) {
   const [params, config, key] = args;
@@ -43,45 +49,27 @@ function checkArguments(...args) {
   }
 }
 
-function fetchIncidents({ page_id, type }, key) {
-  let requestEndpoint;
-  switch (type) {
-    case "all":
-      requestEndpoint = "incidents.json";
-      break;
-    case "unresolved":
-      requestEndpoint = "incidents/unresolved.json";
-      break;
-    case "scheduled":
-      requestEndpoint = "incidents/scheduled.json";
-      break;
-    default:
-      requestEndpoint = "incidents.json";
-  }
+const fetchIncidents = ({ page_id, type }, key) => {
+  const requestEndpoint = {
+    all: "incidents.json",
+    unresolved: "incidents/unresolved.json",
+    scheduled: "incidents/scheduled.json"
+  }[type] || "incidents.json";
 
-  const url = BASE_API_URL + `${page_id}/${requestEndpoint}`;
-
-  return axiosGet(url, {
+  return axiosGet(`${BASE_API_URL}${page_id}/${requestEndpoint}`, {
     headers: { Authorization: `OAuth ${key}`}
   });
-}
+};
 
-function filterIncidents(data, pageConfig) {
-  if (!pageConfig) { return data; }
+module.exports = function statusJockey(params, config, key) {
+  checkArguments(params, config, key);
+  const { limit, page_id, type } = params;
 
-  const filterOrder = [
-    'filterByStatus',
-    'filterbyComponents',
-    'maps',
-    'keys'
-  ];
-
-  return filterOrder.reduce((filteredData, filterKey) => {
-      const filterConfig = pageConfig[filterKey];
-      return filterConfig ?
-        applyFilter(filterKey, filteredData, filterConfig)
-        : filteredData;
-    },
-    data
+  return (
+    fetchIncidents({ page_id, type}, key)
+      .then(({ data }) => {
+        data = data.slice(0, limit); // limit param optional.
+        return filterIncidents(data, config);
+      })
   );
-}
+};
