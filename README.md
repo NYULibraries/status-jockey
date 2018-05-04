@@ -1,6 +1,7 @@
 # status-jockey
 
 [![Coverage Status](https://coveralls.io/repos/github/NYULibraries/statusjockey/badge.svg?branch=master)](https://coveralls.io/github/NYULibraries/statusjockey?branch=master)
+[![npm version](https://img.shields.io/npm/v/status-jockey.svg)](https://www.npmjs.com/package/status-jockey)
 
 Incidents response filter for the [Statuspage.io Incidents API](http://doers.statuspage.io/api/v1/incidents/)
 
