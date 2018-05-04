@@ -1,21 +1,8 @@
-function applyFilter(filterKey, data, filterConfig) {
-    const filters = {
-      filterByStatus: applyStatusFilter,
-      filterByComponents: applyComponentsFilter,
-      customFilter: applyCustomFilter,
-      keys: applyKeysFilter,
-      maps: applyMaps,
-    };
+const applyStatusFilter = (data, statuses) =>
+  data.filter(({ status }) => statuses.includes(status));
 
-    return filters[filterKey](data, filterConfig);
-}
-
-function applyStatusFilter(data, statuses) {
-  return data.filter(({ status }) => statuses.includes(status));
-}
-
-function applyComponentsFilter(data, components) {
-  return data.filter(({ incident_updates }) =>
+const applyComponentsFilter = (data, components) =>
+  data.filter(({ incident_updates }) =>
     incident_updates.find(
       ({ affected_components }) =>
       // first check if null matches
@@ -28,18 +15,16 @@ function applyComponentsFilter(data, components) {
       )
     )
   );
-}
 
-function applyKeysFilter(data, keys) {
-  return data.map(incident =>
+const applyKeysFilter = (data, keys) =>
+  data.map(incident =>
     Object.keys(incident)
       .filter(key => keys.includes(key))
       .reduce((obj, key) => ({...obj, [key]: incident[key]}), {})
   );
-}
 
-function applyMaps(data, maps) {
-  return data.map(incident => {
+const applyMaps = (data, maps) =>
+  data.map(incident => {
     return Object.keys(maps).reduce((obj, mapKey) => {
         // string or a function
         const mapper = maps[mapKey];
@@ -56,10 +41,15 @@ function applyMaps(data, maps) {
         return {...obj, [mapKey]: mapVal};
       }, incident);
   });
-}
 
-function applyCustomFilter(data, filterFunction) {
-  return data.filter(filterFunction);
-}
+const applyCustomFilter = (data, filterFunction) =>
+  data.filter(filterFunction);
 
-module.exports.applyFilter = applyFilter;
+module.exports.applyFilter = (filterKey, data, filterConfig) =>
+  ({
+    filterByStatus: applyStatusFilter,
+    filterByComponents: applyComponentsFilter,
+    customFilter: applyCustomFilter,
+    keys: applyKeysFilter,
+    maps: applyMaps,
+  })[filterKey](data, filterConfig);
