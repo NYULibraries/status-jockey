@@ -3,15 +3,12 @@ const applyStatusFilter = (data, statuses) =>
 
 const applyComponentsFilter = (data, components) =>
   data.filter(({ incident_updates }) =>
-    incident_updates.find(
-      ({ affected_components }) =>
-      // first check if null matches
-      components.includes(affected_components) ||
-      affected_components && (
-        // if an array, check if name matches one of the affected components
-        affected_components.find(
-          ({ name, code }) => components.includes(name) ||
-                              components.includes(code))
+    incident_updates.find(({ affected_components }) =>
+      components.includes(affected_components) || // first check if null matches
+      affected_components && // if an array, check if name matches one of the affected components
+      affected_components.find(({ name, code }) =>
+        components.includes(name) ||
+        components.includes(code)
       )
     )
   );
