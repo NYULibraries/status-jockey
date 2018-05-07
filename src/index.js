@@ -49,12 +49,15 @@ function checkArguments(...args) {
   }
 }
 
+const requestEndpointsByType = {
+  all: "incidents.json",
+  unresolved: "incidents/unresolved.json",
+  scheduled: "incidents/scheduled.json"
+};
+
 const fetchIncidents = ({ page_id, type }, key) => {
-  const requestEndpoint = {
-    all: "incidents.json",
-    unresolved: "incidents/unresolved.json",
-    scheduled: "incidents/scheduled.json"
-  }[type] || "incidents.json";
+  const requestEndpoint =
+    requestEndpointsByType[type] || "incidents.json";
 
   return axiosGet(`${BASE_API_URL}${page_id}/${requestEndpoint}`, {
     headers: { Authorization: `OAuth ${key}`}
