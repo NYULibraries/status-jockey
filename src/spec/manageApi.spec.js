@@ -1,7 +1,7 @@
-const statusJockey = require('../index.js');
+const { manageApi } = require('../index.js');
 const nock = require('nock');
 
-describe('statusJockey', () => {
+describe('manageApi', () => {
   const data = require('./fixtures/statuspage-all.fixture.json');
   const page_id = "abcd1234";
   const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
@@ -67,7 +67,7 @@ describe('statusJockey', () => {
   });
 
   it('should return a Promise', (done) => {
-    const promise = statusJockey(
+    const promise = manageApi(
       { page_id, type: 'all' },
       config,
       TOKEN
@@ -78,7 +78,7 @@ describe('statusJockey', () => {
   });
 
   it('thenable promise should use filtered data', (done) => {
-    statusJockey(
+    manageApi(
       { page_id, type: 'all' },
       config,
       TOKEN

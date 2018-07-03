@@ -1,5 +1,4 @@
-const rewire = require('rewire');
-const filterIncidents = rewire('../../index.js').__get__("filterIncidents");
+const { filterIncidents } = require('../../index.js');
 
 describe('filterIncidents', () => {
   const pageConfig = require('../fixtures/config.fixture.js');

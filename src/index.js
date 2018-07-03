@@ -49,22 +49,22 @@ function checkArguments(...args) {
   }
 }
 
-const requestEndpointsByType = {
-  all: "incidents.json",
-  unresolved: "incidents/unresolved.json",
-  scheduled: "incidents/scheduled.json"
+const manageRequestEndpointsByType = {
+  all: "incidents",
+  unresolved: "incidents/unresolved",
+  scheduled: "incidents/scheduled",
 };
 
 const fetchIncidents = ({ page_id, type }, key) => {
   const requestEndpoint =
-    requestEndpointsByType[type] || "incidents.json";
+    manageRequestEndpointsByType[type] || "incidents";
 
-  return axiosGet(`${BASE_API_URL}${page_id}/${requestEndpoint}`, {
+  return axiosGet(`${BASE_API_URL}${page_id}/${requestEndpoint}.json`, {
     headers: { Authorization: `OAuth ${key}`}
   });
 };
 
-module.exports = function statusJockey(params, config, key) {
+function manageApi(params, config, key) {
   checkArguments(params, config, key);
   const { limit, page_id, type } = params;
 
@@ -75,4 +75,19 @@ module.exports = function statusJockey(params, config, key) {
         return filterIncidents(data, config);
       })
   );
+}
+
+function statusApi({ page_id, type, limit }, config) {
+  const url = `http://${page_id}.statuspage.io/api/v2/summary.json`;
+  return axiosGet(url)
+          .then(({ data }) => {
+            const targetData = data[type].slice(0, limit);
+            return filterIncidents(targetData, config);
+          });
+}
+
+module.exports = {
+  manageApi,
+  statusApi,
+  filterIncidents
 };
