@@ -3,5 +3,5 @@
 module.exports = {
   manageApi: require('./manageApi'),
   statusApi: require('./statusApi'),
-  filterIncidents: require('./filterIncidents')
+  incidentsFilter: require('./incidentsFilter')
 };

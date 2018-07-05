@@ -1,7 +1,7 @@
 'use strict';
 
 const { get: axiosGet } = require('axios');
-const filterIncidents = require('./filterIncidents');
+const incidentsFilter = require('./incidentsFilter');
 const checkArguments = require('./lib/checkArguments');
 
 function fetchFromManagedApi({ page_id, type, limit }, key) {
@@ -11,16 +11,20 @@ function fetchFromManagedApi({ page_id, type, limit }, key) {
     scheduled: 'incidents/scheduled',
   }[type] || 'incidents';
 
-  return axiosGet(`https://api.statuspage.io/v1/pages/${page_id}/${requestEndpoint}.json`, {
-    headers: { Authorization: `OAuth ${key}`}
-  }).then(({ data }) => data.slice(0, limit));
+  return axiosGet(
+    `https://api.statuspage.io/v1/pages/${page_id}/${requestEndpoint}.json`,
+    { headers: { Authorization: `OAuth ${key}`} }
+  ).then(({ data }) => data.slice(0, limit))
+    .catch(err => console.error(err));
 }
 
-function manageApi(params, config, key) {
+const manageApi = (config, key) => params => {
   checkArguments(params, config, key).withKey();
+  const filterIncidents = incidentsFilter(config);
 
   return fetchFromManagedApi(params, key)
-    .then(data => filterIncidents(data, config));
-}
+    .then(filterIncidents)
+    .catch(err => console.error(err));
+};
 
 module.exports = manageApi;

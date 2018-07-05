@@ -7,13 +7,12 @@ const ORDERED_FILTER_EXECUTION_LIST = Object.freeze([
   'keys'
 ]);
 
-function filterIncidents(data, pageConfig) {
-  return ORDERED_FILTER_EXECUTION_LIST
+const incidentsFilter = (config) =>
+  (data) => ORDERED_FILTER_EXECUTION_LIST
     .reduce((res, key) =>
-      pageConfig[key] ?
-      applyFilter(key, res, pageConfig[key])
+      config[key] ?
+      applyFilter(key, res, config[key])
       : res
   , data);
-}
 
-module.exports = filterIncidents;
+module.exports = incidentsFilter;

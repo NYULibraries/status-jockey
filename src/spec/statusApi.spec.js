@@ -7,6 +7,7 @@ describe('statusApi', () => {
   const data = require('./fixtures/summary.fixture.json');
   const page_id = "abcd1234";
   const config = require('./fixtures/config.fixture.js');
+  const fetchStatusApi = statusApi(config);
 
   const expectedResult = [
     {
@@ -52,9 +53,8 @@ describe('statusApi', () => {
   });
 
   it('should return a Promise', (done) => {
-    const promise = statusApi(
-      { page_id, type: 'incidents' },
-      config
+    const promise = fetchStatusApi(
+      { page_id, type: 'incidents' }
     );
 
     expect(promise.__proto__.constructor).toBe(Promise);

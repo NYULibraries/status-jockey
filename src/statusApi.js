@@ -1,7 +1,7 @@
 'use strict';
 
 const { get: axiosGet } = require('axios');
-const filterIncidents = require('./filterIncidents');
+const incidentsFilter = require('./incidentsFilter');
 const checkArguments = require('./lib/checkArguments');
 
 function fetchFromStatusApi(params) {
@@ -20,15 +20,18 @@ function fetchFromStatusApi(params) {
 
   return (
     axiosGet(`http://${page_id}.statuspage.io/api/v2/${type}.json`)
-      .then(({ data }) => {
-        return data[dataProp].slice(0, limit);
-      })
+      .then(({ data }) => data[dataProp].slice(0, limit))
+      .catch(err => console.error(err))
   );
 }
 
-function statusApi(params, config) {
+const statusApi = config => params => {
   checkArguments(params, config);
-  return fetchFromStatusApi(params, config).then(data => filterIncidents(data, config));
-}
+  const filterIncidents = incidentsFilter(config);
+
+  return fetchFromStatusApi(params, config)
+  .then(filterIncidents)
+  .catch(err => console.error(err));
+};
 
 module.exports = statusApi;

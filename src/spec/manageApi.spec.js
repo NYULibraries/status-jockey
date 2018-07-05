@@ -7,6 +7,7 @@ describe('manageApi', () => {
   const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
   const TOKEN = "dffa6323-4996-44a1-9dc3-01a994ed9e5f";
   const config = require('./fixtures/config.fixture.js');
+  const fetchManageApi = manageApi(config, TOKEN);
 
   const expectedResult = [
     {
@@ -53,22 +54,14 @@ describe('manageApi', () => {
   });
 
   it('should return a Promise', (done) => {
-    const promise = manageApi(
-      { page_id, type: 'all' },
-      config,
-      TOKEN
-    );
+    const promise = fetchManageApi({ page_id, type: 'incidents' });
 
     expect(promise.__proto__.constructor).toBe(Promise);
     done();
   });
 
   it('thenable promise should use filtered data', (done) => {
-    manageApi(
-      { page_id, type: 'all' },
-      config,
-      TOKEN
-    ).then((filteredData) => {
+    fetchManageApi({ page_id, type: 'all' }).then((filteredData) => {
       expect(filteredData).toEqual(expectedResult);
       done();
     });
