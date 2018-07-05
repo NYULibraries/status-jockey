@@ -4,7 +4,6 @@ const data = require('../../fixtures/statuspage-all.fixture.json');
 
 const filterFunctions = {
   applyStatusFilter: allFilters.__get__('applyStatusFilter'),
-  applyComponentsFilter: allFilters.__get__('applyComponentsFilter'),
   applyKeysFilter: allFilters.__get__('applyKeysFilter'),
   applyMaps: allFilters.__get__('applyMaps'),
   applyCustomFilter: allFilters.__get__('applyCustomFilter')
@@ -22,21 +21,6 @@ describe('applyStatusFilter', () => {
     applyStatusFilter(data, ["investigating", "completed"]).forEach(incident => {
       expect(incident.status).toMatch(/(investigating|completed)/);
     });
-  });
-});
-
-describe('applyComponentsFilter', () => {
-  const { applyComponentsFilter } = filterFunctions;
-  it('should filter affected components by name', () => {
-    expect(applyComponentsFilter(data, ["EZProxy"]).length).toEqual(1);
-  });
-
-  it('should filter affected components by code', () => {
-    expect(applyComponentsFilter(data, ["q23q1ggvgj60"]).length).toEqual(1);
-  });
-
-  it('should include filter of \'null\' components if specified', () => {
-    expect(applyComponentsFilter(data, ["EZProxy", null]).length).toEqual(12);
   });
 });
 

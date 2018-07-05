@@ -1,18 +1,5 @@
 const applyStatusFilter = (data, statuses) =>
-  data.filter(({ status }) => statuses.includes(status));
-
-const applyComponentsFilter = (data, components) =>
-  data.filter(({ incident_updates }) =>
-    incident_updates.some(({ affected_components }) =>
-      // first check if null matches
-      components.includes(affected_components) ||
-      // if an array, check if name matches one of the affected components
-      Array.isArray(affected_components) &&
-      affected_components.some(({ name, code }) =>
-        components.includes(name) || components.includes(code)
-      )
-    )
-  );
+  applyCustomFilter(data, ({ status }) => statuses.includes(status));
 
 const applyKeysFilter = (data, keys) =>
   data.map(incident =>
@@ -39,7 +26,6 @@ const applyCustomFilter = (data, filterFunction) => data.filter(filterFunction);
 function applyFilter(filterKey, data, filterConfig) {
   return {
     filterByStatus: applyStatusFilter,
-    filterByComponents: applyComponentsFilter,
     customFilter: applyCustomFilter,
     keys: applyKeysFilter,
     maps: applyMaps,
