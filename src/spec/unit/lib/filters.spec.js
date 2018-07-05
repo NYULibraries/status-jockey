@@ -1,6 +1,6 @@
 const rewire = require('rewire');
-const allFilters = rewire('../../lib/filters.js');
-const data = require('../fixtures/statuspage-all.fixture.json');
+const allFilters = rewire('../../../lib/applyFilter');
+const data = require('../../fixtures/statuspage-all.fixture.json');
 
 const filterFunctions = {
   applyStatusFilter: allFilters.__get__('applyStatusFilter'),

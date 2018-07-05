@@ -1,4 +1,4 @@
-const { manageApi } = require('../index.js');
+const manageApi = require('../manageApi');
 const nock = require('nock');
 
 describe('manageApi', () => {

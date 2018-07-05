@@ -1,7 +1,7 @@
 const rewire = require('rewire');
 const nock = require('nock');
 
-const fetchIncidents = rewire('../../index.js').__get__('fetchIncidents');
+const fetchIncidents = rewire('../../../manageApi').__get__('fetchIncidents');
 const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
 
 describe('fetchIncidents', () => {
@@ -9,7 +9,7 @@ describe('fetchIncidents', () => {
   const TOKEN = "dffa6323-4996-44a1-9dc3-01a994ed9e5f";
 
   describe('when fetching all incidents', () => {
-    const data = require('../fixtures/statuspage-all.fixture.json');
+    const data = require('../../fixtures/statuspage-all.fixture.json');
     const requestEndpoint = "incidents.json";
     const type = "all";
 
@@ -57,7 +57,7 @@ describe('fetchIncidents', () => {
   });
 
   describe('when fetching scheduled incidents', () => {
-    const data = require('../fixtures/statuspage-scheduled.fixture.json');
+    const data = require('../../fixtures/statuspage-scheduled.fixture.json');
     const requestEndpoint = 'incidents/scheduled.json';
     const type = "scheduled";
 
@@ -77,7 +77,7 @@ describe('fetchIncidents', () => {
   });
 
   describe('when fetching scheduled incidents', () => {
-    const data = require('../fixtures/statuspage-unresolved.fixture.json');
+    const data = require('../../fixtures/statuspage-unresolved.fixture.json');
     const requestEndpoint = 'incidents/unresolved.json';
     const type = "unresolved";
 

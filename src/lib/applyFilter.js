@@ -36,13 +36,14 @@ const applyMaps = (data, maps) =>
 
 const applyCustomFilter = (data, filterFunction) => data.filter(filterFunction);
 
-const filterFunctionsByConfigKey = {
-  filterByStatus: applyStatusFilter,
-  filterByComponents: applyComponentsFilter,
-  customFilter: applyCustomFilter,
-  keys: applyKeysFilter,
-  maps: applyMaps,
-};
+function applyFilter(filterKey, data, filterConfig) {
+  return {
+    filterByStatus: applyStatusFilter,
+    filterByComponents: applyComponentsFilter,
+    customFilter: applyCustomFilter,
+    keys: applyKeysFilter,
+    maps: applyMaps,
+  }[filterKey](data, filterConfig);
+}
 
-module.exports.applyFilter = (filterKey, data, filterConfig) =>
-    (filterFunctionsByConfigKey)[filterKey](data, filterConfig);
+module.exports = applyFilter;

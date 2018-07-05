@@ -1,4 +1,4 @@
-const { sttusApi } = require('../index.js');
+const statusApi = require('../statusApi');
 const nock = require('nock');
 
 describe('statusApi', () => {

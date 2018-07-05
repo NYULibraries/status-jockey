@@ -1,7 +1,7 @@
-const { filterIncidents } = require('../../index.js');
+const filterIncidents = require('../filterIncidents');
 
 describe('filterIncidents', () => {
-  const pageConfig = require('../fixtures/config.fixture.js');
+  const pageConfig = require('./fixtures/config.fixture.js');
   const expectedResult = [
     {
       status: 'red',
@@ -41,11 +41,11 @@ describe('filterIncidents', () => {
 
   let data;
   beforeEach(() => {
-    data = require('../fixtures/statuspage-all.fixture.json');
+    data = require('./fixtures/statuspage-all.fixture.json');
   });
 
-  it('should return unfiltered data with null configuration', () => {
-    expect(filterIncidents(data, null)).toEqual(data);
+  it('should return unfiltered data with empty configuration object', () => {
+    expect(filterIncidents(data, {})).toEqual(data);
   });
 
   it('should return filtered data with configuration', () => {
