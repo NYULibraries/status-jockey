@@ -4,15 +4,31 @@ const { get: axiosGet } = require('axios');
 const filterIncidents = require('./filterIncidents');
 const checkArguments = require('./lib/checkArguments');
 
-function statusApi(params, config) {
-  checkArguments(params, config);
+function fetchFromStatusApi(params) {
   const { page_id, type, limit } = params;
 
-  return axiosGet(`http://${page_id}.statuspage.io/api/v2/summary.json`)
-          .then(({ data }) => {
-            const targetData = data[type].slice(0, limit);
-            return filterIncidents(targetData, config);
-          });
+  const dataProp = {
+    summary: 'summary',
+    status: 'status',
+    components: 'components',
+    incidents: 'incidents',
+    unresolved: 'incidents',
+    upcoming: 'scheduled_maintenances',
+    active: 'scheduled_maintenances',
+    ['scheduled-maintenances']: 'scheduled_maintenances',
+  }[type] || 'incidents';
+
+  return (
+    axiosGet(`http://${page_id}.statuspage.io/api/v2/${type}.json`)
+      .then(({ data }) => {
+        return data[dataProp].slice(0, limit);
+      })
+  );
+}
+
+function statusApi(params, config) {
+  checkArguments(params, config);
+  return fetchFromStatusApi(params, config).then(data => filterIncidents(data, config));
 }
 
 module.exports = statusApi;
