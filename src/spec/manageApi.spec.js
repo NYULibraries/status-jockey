@@ -45,25 +45,11 @@ describe('manageApi', () => {
     }
   ];
 
-  let allIncidentsRequest, scheduledIncidentsRequest, unresolvedIncidentsRequest;
   beforeEach(() => {
-    allIncidentsRequest =
-      nock(BASE_API_URL)
-        .get(`/${page_id}/incidents.json`)
-        .matchHeader('Authorization', `OAuth ${TOKEN}`)
-        .reply(200, data);
-
-    scheduledIncidentsRequest =
-      nock(BASE_API_URL)
-        .get(`/${page_id}/incidents.json`)
-        .matchHeader('Authorization', `OAuth ${TOKEN}`)
-        .reply(200, data);
-
-    unresolvedIncidentsRequest =
-      nock(BASE_API_URL)
-        .get(`/${page_id}/incidents.json`)
-        .matchHeader('Authorization', `OAuth ${TOKEN}`)
-        .reply(200, data);
+    nock(BASE_API_URL)
+      .get(`/${page_id}/incidents.json`)
+      .matchHeader('Authorization', `OAuth ${TOKEN}`)
+      .reply(200, data);
   });
 
   it('should return a Promise', (done) => {
@@ -86,8 +72,6 @@ describe('manageApi', () => {
       expect(filteredData).toEqual(expectedResult);
       done();
     });
-
-
   });
 
   afterEach(() => {
