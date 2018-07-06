@@ -104,8 +104,10 @@ const fetchManageApi  = manageApi(config, key)=
 fetchManageApi({ page_id: 'abcd123', type: 'incidents', limit: 5 })
   .then(dataList => {
     // do something with dataList (array of incidents/maintenances)
-  });
-
+  })
+  .catch(err => {
+    // handle error
+  })
 ```
 
 ## `incidentsFilter`
@@ -126,4 +128,7 @@ $.ajax('http://abcdefg.statuspage.io/api/v2/incidents/unresolved.json')
     // do something...
     return incidents
   }.then(filterIncidents)
+  .catch(err => {
+    // handle error
+  })
 ```
