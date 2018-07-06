@@ -35,7 +35,7 @@ describe('fetchFromManagedApi', () => {
           .reply(200, data);
 
       fetchFromManagedApi({ page_id }, TOKEN)
-        .then(_res => {
+        .then(() => {
           expect(allIncidentsRequestWithHeaders.isDone()).toBe(true);
           done();
       });
@@ -98,7 +98,7 @@ describe('fetchFromManagedApi', () => {
 
   describe('limits parameter', () => {
     const data = require('../../fixtures/statuspage-all.fixture.json');
-    const requestEndpoint = "incidents.json";
+    const requestEndpoint = 'incidents.json';
     const type = 'all';
 
     it('should limit output of array', (done) => {

@@ -68,9 +68,21 @@ const config = {
 ```
 
 ## `statusApi`: Public Status API (v2)
+
+`statusApi(config) -> statusApiFetcher({ page_id, type, limit })`
+
 * `page_id` (required): Queries the incidents of the corresponding statuspage.io page id.
-* `type` (optional): Queries one of the `json` files specified in the [Statuspage public API](https://nyulibraries.statuspage.io/api). For example, `incidents/unresolved`, `scheduled-maintenances`, etc. (default: `incidents`)
+* `type` (optional): Queries one `.json` files specified in the [Statuspage public API](https://nyulibraries.statuspage.io/api) (default: `incidents`)
+  * `components`
+  * `incidents`
+  * `incidents/unresolved`
+  * `incidents/unresolved`
+  * `scheduled-maintenances`
+  * `scheduled-maintenances/upcoming`
+  * `scheduled-maintenances/active`
 * `limit` (optional): Limits to the X most recent incidents in response (default: no limit).
+
+`statusApi` curried with a configuration object  
 
 ```js
 const config = {
@@ -88,6 +100,8 @@ fetchStatusApi({ page_id: 'abcd123', type: 'incidents', limit: 5 })
 ```
 
 ## `manageApi`: Manage API (v1)
+`manageApi(config) -> manageApiFetcher({ page_id, type, limit })`
+
 * `page_id` (required): Queries the incidents of the corresponding statuspage.io page id.
 * `type` (optional): Queries `scheduled`, `unresolved`, or `incidents` (default: `incidents`)
 * `limit` (optional): Limits to the X most recent incidents in response (default: no limit).
