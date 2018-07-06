@@ -12,9 +12,9 @@ function fetchFromStatusApi(params) {
     status: 'status',
     components: 'components',
     incidents: 'incidents',
-    unresolved: 'incidents',
-    upcoming: 'scheduled_maintenances',
-    active: 'scheduled_maintenances',
+    ['incidents/unresolved']: 'incidents',
+    ['scheduled-maintenances/upcoming']: 'scheduled_maintenances',
+    ['scheduled-maintenances/active']: 'scheduled_maintenances',
     ['scheduled-maintenances']: 'scheduled_maintenances',
   }[type] || 'incidents';
 
