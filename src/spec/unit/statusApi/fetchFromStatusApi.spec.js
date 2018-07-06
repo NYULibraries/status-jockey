@@ -6,7 +6,6 @@ const page_id = 'abcd123';
 const BASE_API_URL = `https://${page_id}.statuspage.io/api/v2/`;
 
 const endpointMap = {
-  status: 'status',
   components: 'components',
   incidents: 'incidents',
   ['incidents/unresolved']: 'incidents',
@@ -60,22 +59,22 @@ describe('fetchFromStatusApi', () => {
     });
   });
 
-  describe('summary', () => {
-    const data = require('../../fixtures/statusApi.fixture.json');
-
-    it('should return all data', (done) => {
-      const request = nock(BASE_API_URL)
-        .get('/summary.json')
-        .reply(200, data);
-
-      fetchFromStatusApi({ page_id, type: 'summary' })
-        .then(res => {
-          expect(request.isDone()).toBe(true);
-          expect(res).toEqual(data);
-          done();
-      });
-    });
-  });
+  // describe('summary', () => {
+  //   const data = require('../../fixtures/statusApi.fixture.json');
+  //
+  //   it('should return all data', (done) => {
+  //     const request = nock(BASE_API_URL)
+  //       .get('/summary.json')
+  //       .reply(200, data);
+  //
+  //     fetchFromStatusApi({ page_id, type: 'summary' })
+  //       .then(res => {
+  //         expect(request.isDone()).toBe(true);
+  //         expect(res).toEqual(data);
+  //         done();
+  //     });
+  //   });
+  // });
 
   describe('limits parameter', () => {
     const data = require('../../fixtures/statusApi.fixture.json');

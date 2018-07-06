@@ -7,7 +7,6 @@ const checkArguments = require('./lib/checkArguments');
 function fetchFromStatusApi({ page_id, type, limit }) {
   type = type || 'incidents';
   const dataProp = {
-    status: 'status',
     components: 'components',
     incidents: 'incidents',
     ['incidents/unresolved']: 'incidents',
@@ -17,20 +16,7 @@ function fetchFromStatusApi({ page_id, type, limit }) {
   }[type] || 'incidents';
 
   return axiosGet(`https://${page_id}.statuspage.io/api/v2/${type}.json`)
-    .then(({ data }) => {
-      let result;
-      if (type === 'summary') {
-        const sliced = ['scheduled_maintenances', 'incidents']
-          .reduce((res, key) => (
-            { ...res, ...{ [key]: data[key].slice(0, limit) } }
-          ), {});
-        result = { ...data, ...sliced };
-      } else {
-        const responseData = data[dataProp];
-        result = Array.isArray(responseData) ? responseData.slice(0, limit) : responseData;
-      }
-      return result;
-    })
+    .then(({ data }) => data[dataProp].slice(0, limit))
     .catch(err => console.error(err));
 }
 
