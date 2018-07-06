@@ -1,8 +1,9 @@
-const rewire = require('rewire');
-const filterIncidents = rewire('../../index.js').__get__("filterIncidents");
+const incidentsFilter = require('../incidentsFilter');
 
-describe('filterIncidents', () => {
-  const pageConfig = require('../fixtures/config.fixture.js');
+describe('incidentsFilter', () => {
+  const pageConfig = require('./fixtures/config.fixture.js');
+  const filterIncidents = incidentsFilter(pageConfig);
+
   const expectedResult = [
     {
       status: 'red',
@@ -42,30 +43,34 @@ describe('filterIncidents', () => {
 
   let data;
   beforeEach(() => {
-    data = require('../fixtures/statuspage-all.fixture.json');
+    data = require('./fixtures/statuspage-all.fixture.json');
   });
 
-  it('should return unfiltered data with null configuration', () => {
-    expect(filterIncidents(data, null)).toEqual(data);
+  it('should return unfiltered data with empty configuration object', () => {
+    const config = {};
+    const filterWithEmptyConfig = incidentsFilter(config);
+    expect(filterWithEmptyConfig(data)).toEqual(data);
   });
 
   it('should return filtered data with configuration', () => {
-    expect(filterIncidents(data, pageConfig)).toEqual(expectedResult);
+    expect(filterIncidents(data)).toEqual(expectedResult);
   });
 
   it('should be composed of pure functions', () => {
     data = Object.freeze(data);
-    expect(() => filterIncidents(data, pageConfig)).not.toThrow();
+    expect(() => filterIncidents(data)).not.toThrow();
   });
 
   it('should work without all config parameters defined', () => {
     const config = { keys: ["id", "status"] };
-    expect(() => filterIncidents(data, config)).not.toThrow();
+    const filterWithLimitedConfig = incidentsFilter(config);
+    expect(() => filterWithLimitedConfig(data)).not.toThrow();
   });
 
   it('should not throw error with invalid filters defined', () => {
     const config = { keysX: ["id", "status"] };
-    expect(() => filterIncidents(data, config)).not.toThrow();
+    const filterWithInvalidConfig = incidentsFilter(config);
+    expect(() => filterWithInvalidConfig(data)).not.toThrow();
   });
 
 });

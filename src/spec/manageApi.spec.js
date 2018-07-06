@@ -1,12 +1,13 @@
-const statusJockey = require('../index.js');
+const manageApi = require('../manageApi');
 const nock = require('nock');
 
-describe('statusJockey', () => {
+describe('manageApi', () => {
   const data = require('./fixtures/statuspage-all.fixture.json');
   const page_id = "abcd1234";
   const BASE_API_URL = "https://api.statuspage.io/v1/pages/";
   const TOKEN = "dffa6323-4996-44a1-9dc3-01a994ed9e5f";
   const config = require('./fixtures/config.fixture.js');
+  const fetchManageApi = manageApi(config, TOKEN);
 
   const expectedResult = [
     {
@@ -45,49 +46,25 @@ describe('statusJockey', () => {
     }
   ];
 
-  let allIncidentsRequest, scheduledIncidentsRequest, unresolvedIncidentsRequest;
   beforeEach(() => {
-    allIncidentsRequest =
-      nock(BASE_API_URL)
-        .get(`/${page_id}/incidents.json`)
-        .matchHeader('Authorization', `OAuth ${TOKEN}`)
-        .reply(200, data);
-
-    scheduledIncidentsRequest =
-      nock(BASE_API_URL)
-        .get(`/${page_id}/incidents.json`)
-        .matchHeader('Authorization', `OAuth ${TOKEN}`)
-        .reply(200, data);
-
-    unresolvedIncidentsRequest =
-      nock(BASE_API_URL)
-        .get(`/${page_id}/incidents.json`)
-        .matchHeader('Authorization', `OAuth ${TOKEN}`)
-        .reply(200, data);
+    nock(BASE_API_URL)
+      .get(`/${page_id}/incidents.json`)
+      .matchHeader('Authorization', `OAuth ${TOKEN}`)
+      .reply(200, data);
   });
 
   it('should return a Promise', (done) => {
-    const promise = statusJockey(
-      { page_id, type: 'all' },
-      config,
-      TOKEN
-    );
+    const promise = fetchManageApi({ page_id, type: 'incidents' });
 
     expect(promise.__proto__.constructor).toBe(Promise);
     done();
   });
 
   it('thenable promise should use filtered data', (done) => {
-    statusJockey(
-      { page_id, type: 'all' },
-      config,
-      TOKEN
-    ).then((filteredData) => {
+    fetchManageApi({ page_id, type: 'all' }).then((filteredData) => {
       expect(filteredData).toEqual(expectedResult);
       done();
     });
-
-
   });
 
   afterEach(() => {

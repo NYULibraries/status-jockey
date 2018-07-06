@@ -1,8 +1,6 @@
 module.exports = {
   // only return incidents with the following statuses. Otherwise, return all.
   filterByStatus: ["investigating", "completed"],
-  // only return incidents from the following components. Otherwise, return all.
-  filterByComponents: ["EZProxy"],
   // only returns the following keys
   keys: ["id", "message", "incident_link", "created_at", "status", "hashtags"],
   // map Statuspage.io response key values to custom key values. Non-mapped values in keys are given the default key.
@@ -20,6 +18,10 @@ module.exports = {
           return "orange";
         case "monitoring":
           return "green";
+        case "scheduled":
+          return "green";
+        case "in_progress":
+          return "orange";
         default:
           return "red";
       }

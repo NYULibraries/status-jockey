@@ -1,11 +1,11 @@
 {
   "name": "status-jockey",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Response filter for Statuspage.io API",
   "main": "./dist/index.js",
   "scripts": {
     "test": "nyc --reporter=lcov babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json && yarn coveralls",
-    "test:debugger": "babel-node --inspect --debug-brk node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test:debugger": "babel-node --inspect-brk node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
     "coveralls": "yarn istanbul-coveralls",
     "babelify": "babel src --out-dir dist --ignore spec/",
     "build": "BABEL_ENV=production yarn babelify",
