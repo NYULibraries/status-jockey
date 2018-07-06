@@ -1,59 +1,104 @@
 const rewire = require('rewire');
 const nock = require('nock');
 
-const config = require('../../fixtures/config.fixture.js');
-const fetchFromStatusApi = rewire('../../../statusApi').__get__('fetchFromStatusApi')(config);
-const BASE_API_URL = 'http://${page_id}.statuspage.io/api/v2/';
-const data = require('./fixtures/statusApi.fixture.json');
-const { incidents, scheduled_maintenances } = data;
+const fetchFromStatusApi = rewire('../../../statusApi').__get__('fetchFromStatusApi');
+const page_id = 'abcd123';
+const BASE_API_URL = `https://${page_id}.statuspage.io/api/v2/`;
+
+const endpointMap = {
+  status: 'status',
+  components: 'components',
+  incidents: 'incidents',
+  ['incidents/unresolved']: 'incidents',
+  ['scheduled-maintenances/upcoming']: 'scheduled_maintenances',
+  ['scheduled-maintenances/active']: 'scheduled_maintenances',
+  ['scheduled-maintenances']: 'scheduled_maintenances',
+};
 
 describe('fetchFromStatusApi', () => {
-  const incidentsResult = [
-    {
-      status: 'orange',
-      created_at: "2014-05-14T14:22:39.441-06:00",
-      id: 'cp306tmzcl0y',
-      incident_link: 'http://stspg.dev:5000/Q0E',
-      message: "Our master database has ham sandwiches flying out of the rack, and we're working our hardest to stop the bleeding. The whole site is down while we restore functionality, and we'll provide another update within 30 minutes. #majoroutage",
-      hashtags: [
-        'majoroutage'
-      ]
-    },
-    {
-      status: 'green',
-      created_at: '2014-05-12T14:22:39.441-06:00',
-      id: '2z5g29qrrxvl',
-      incident_link: 'http://stspg.dev:5000/Q0R',
-      message: 'A small display issue with the display of the website was discovered after a recent deploy. The deploy has been rolled back and the website is again functioning correctly.',
-      hashtags: []
-    },
-  ];
 
-  describe('incidents request', () => {
-    beforeEach(() => {
-      nock(BASE_API_URL)
-      .get(`/incidents.json`)
-      .reply(200, incidents);
+  Object.keys(endpointMap).forEach((key) => {
+    const type = key;
+    const endpoint = key;
+    const dataProp = endpointMap[key];
+    const data = require('../../fixtures/statusApi.fixture.json');
+    const expectedResults = data[dataProp];
+
+    describe(`when fetching ${endpoint}`, () => {
+      it(`should data fetch from ${endpoint}`, (done) => {
+        const request =
+          nock(BASE_API_URL)
+            .get(`/${endpoint}.json`)
+            .reply(200, data);
+
+        fetchFromStatusApi({ page_id, type })
+          .then(response => {
+            expect(request.isDone()).toBe(true);
+            expect(response).toEqual(expectedResults);
+            done();
+        });
+      });
     });
   });
 
-  describe('scheduled_maintenances', () => {
-    const scheduledMaintenancesResult = [
-      {
+  describe('without a type parameter', () => {
+    const data = require('../../fixtures/statusApi.fixture.json');
+    const expectedResults = data.incidents;
 
-      }
-    ]
+    it('should fetch incidents', (done) => {
+      const request =
+        nock(BASE_API_URL)
+        .get('/incidents.json')
+        .reply(200, data);
 
-    beforeEach(() => {
-      nock(BASE_API_URL)
-      .get(`/incidents.json`)
-      .reply(200, scheduled_maintenances);
+      fetchFromStatusApi({ page_id })
+        .then(res => {
+          expect(request.isDone()).toBe(true);
+          expect(res).toEqual(expectedResults);
+          done();
+        });
     });
+  });
 
+  describe('summary', () => {
+    const data = require('../../fixtures/statusApi.fixture.json');
 
+    it('should return all data', (done) => {
+      const request = nock(BASE_API_URL)
+        .get('/summary.json')
+        .reply(200, data);
+
+      fetchFromStatusApi({ page_id, type: 'summary' })
+        .then(res => {
+          expect(request.isDone()).toBe(true);
+          expect(res).toEqual(data);
+          done();
+      });
+    });
+  });
+
+  describe('limits parameter', () => {
+    const data = require('../../fixtures/statusApi.fixture.json');
+    const type = 'incidents';
+    const limit = 2;
+
+    it('should limit output of array', (done) => {
+      const request =
+        nock(BASE_API_URL)
+          .get('/incidents.json')
+          .reply(200, data);
+
+      fetchFromStatusApi({ page_id, type, limit: 2 })
+        .then(res => {
+          expect(request.isDone()).toBe(true);
+          expect(res).toEqual(data.incidents.slice(0, limit));
+          done();
+      });
+    });
   });
 
   afterEach(() => {
     nock.cleanAll();
   });
+
 });

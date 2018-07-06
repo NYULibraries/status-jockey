@@ -18,6 +18,10 @@ module.exports = {
           return "orange";
         case "monitoring":
           return "green";
+        case "scheduled":
+          return "green";
+        case "in_progress":
+          return "orange";
         default:
           return "red";
       }

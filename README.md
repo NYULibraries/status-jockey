@@ -69,7 +69,7 @@ const config = {
 
 ## `statusApi`: Public Status API (v2)
 * `page_id` (required): Queries the incidents of the corresponding statuspage.io page id.
-* `type` (optional): Queries one of the `json` files specified in the [Statuspage public API](https://nyulibraries.statuspage.io/api). For example, `incidents/unresolved`, `scheduled_maintenances`, etc. (default: `incidents`)
+* `type` (optional): Queries one of the `json` files specified in the [Statuspage public API](https://nyulibraries.statuspage.io/api). For example, `incidents/unresolved`, `scheduled-maintenances`, etc. (default: `incidents`)
 * `limit` (optional): Limits to the X most recent incidents in response (default: no limit).
 
 ```js
