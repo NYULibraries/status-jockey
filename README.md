@@ -80,9 +80,7 @@ const config = {
   * `scheduled-maintenances`
   * `scheduled-maintenances/upcoming`
   * `scheduled-maintenances/active`
-* `limit` (optional): Limits to the X most recent incidents in response (default: no limit).
-
-`statusApi` curried with a configuration object  
+* `limit` (optional): Limits to the X most recent incidents in response (default: no limit). 
 
 ```js
 const config = {
