@@ -1,8 +1,8 @@
 'use strict';
 
-const { get: axiosGet } = require('axios');
-const { incidentsFilter } = require('./incidentsFilter');
-const checkArguments = require('./lib/checkArguments');
+import { get as axiosGet } from 'axios';
+import { incidentsFilter } from './incidentsFilter';
+import { checkArguments } from './lib/checkArguments';
 
 function fetchFromManagedApi({ page_id, type, limit }, key) {
   const requestEndpoint = {

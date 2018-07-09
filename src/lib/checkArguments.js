@@ -1,4 +1,4 @@
-function checkArguments(params, config, key) {
+export function checkArguments(params, config, key) {
   if (params === null || typeof params !== 'object') {
     throw new TypeError(
       'Status jockey requires a search parameters object'
@@ -26,5 +26,3 @@ function checkArguments(params, config, key) {
     },
   });
 }
-
-module.exports = checkArguments;

@@ -1,4 +1,4 @@
-const checkArguments = require('../../../lib/checkArguments');
+const { checkArguments } = require('../../../lib/checkArguments');
 
 describe('checkArguments', () => {
   it('should check first argument (params) is an object', () => {

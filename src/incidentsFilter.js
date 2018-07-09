@@ -1,4 +1,4 @@
-const applyFilter = require("./lib/applyFilter");
+import { applyFilter } from './lib/applyFilter';
 
 const ORDERED_FILTER_EXECUTION_LIST = Object.freeze([
   'filterByStatus',

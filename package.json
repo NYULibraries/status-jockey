@@ -5,11 +5,13 @@
   "main": "./dist/index.js",
   "module": "./es6/index.js",
   "scripts": {
-    "test": "BABEL_ENV=cjs nyc --reporter=lcov babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json && yarn coveralls",
-    "test:debugger": "BABEL_ENV=cjs babel-node --inspect-brk node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test:base": "BABEL_ENV=cjs babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test": "nyc --reporter=lcov yarn test:base && yarn coveralls",
+    "test:debugger": "yarn test:base --inspect-brk",
     "coveralls": "yarn istanbul-coveralls",
-    "babelify-cjs": "BABEL_ENV=cjs babel src --out-dir dist --ignore spec/",
-    "babelify-es6": "BABEL_ENV=es6 babel src --out-dir es6 --ignore spec/",
+    "babelify": "babel src --ignore spec",
+    "babelify-cjs": "BABEL_ENV=cjs yarn babelify --out-dir dist",
+    "babelify-es6": "BABEL_ENV=es6 yarn babelify --out-dir es6",
     "build": "yarn babelify-cjs && yarn babelify-es6",
     "prepare": "yarn build"
   },
