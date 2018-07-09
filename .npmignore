@@ -3,6 +3,5 @@ coverage/
 .nyc_output/
 .git/
 node_modules/
-.babelrc
-.eslintrc
-.travis.yml
+.*
+yarn-error.log

@@ -2,12 +2,18 @@
   "presets": [
     ["env", {
       "targets": {
-        "node": "6.10"
-      }
+        "node": "6.10",
+        "browsers": [">.25%"]
+      },
+      "modules": false
     }]
   ],
   "plugins": [
     "transform-object-rest-spread"
   ],
-  "sourceMaps": "both"
+  "env": {
+    "cjs": {
+      "plugins": ["transform-es2015-modules-commonjs"]
+    }
+  }
 }
