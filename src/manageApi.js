@@ -1,7 +1,7 @@
 'use strict';
 
 const { get: axiosGet } = require('axios');
-const incidentsFilter = require('./incidentsFilter');
+const { incidentsFilter } = require('./incidentsFilter');
 const checkArguments = require('./lib/checkArguments');
 
 function fetchFromManagedApi({ page_id, type, limit }, key) {
@@ -18,7 +18,7 @@ function fetchFromManagedApi({ page_id, type, limit }, key) {
     .catch(err => console.error(err));
 }
 
-const manageApi = (config, key) => params => {
+export const manageApi = (config, key) => params => {
   checkArguments(params, config, key).withKey();
   const filterIncidents = incidentsFilter(config);
 
@@ -26,5 +26,3 @@ const manageApi = (config, key) => params => {
     .then(filterIncidents)
     .catch(err => console.error(err));
 };
-
-module.exports = manageApi;

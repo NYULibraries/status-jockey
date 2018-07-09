@@ -1,7 +1,5 @@
 'use strict';
 
-module.exports = {
-  manageApi: require('./manageApi'),
-  statusApi: require('./statusApi'),
-  incidentsFilter: require('./incidentsFilter')
-};
+export { manageApi } from './manageApi';
+export { statusApi } from './statusApi';
+export { incidentsFilter } from './incidentsFilter';

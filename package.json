@@ -3,12 +3,14 @@
   "version": "2.0.1",
   "description": "Response filter for Statuspage.io API",
   "main": "./dist/index.js",
+  "module": "./es6/index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json && yarn coveralls",
-    "test:debugger": "babel-node --inspect-brk node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
+    "test": "BABEL_ENV=cjs nyc --reporter=lcov babel-node node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json && yarn coveralls",
+    "test:debugger": "BABEL_ENV=cjs babel-node --inspect-brk node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./src/spec/support/jasmine.json",
     "coveralls": "yarn istanbul-coveralls",
-    "babelify": "babel src --out-dir dist --ignore spec/",
-    "build": "BABEL_ENV=production yarn babelify",
+    "babelify-cjs": "BABEL_ENV=cjs babel src --out-dir dist --ignore spec/",
+    "babelify-es6": "BABEL_ENV=es6 babel src --out-dir es6 --ignore spec/",
+    "build": "yarn babelify-cjs && yarn babelify-es6",
     "prepare": "yarn build"
   },
   "repository": {
@@ -24,6 +26,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-istanbul": "^4.1.6",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "istanbul-coveralls": "^1.0.3",
@@ -33,6 +36,7 @@
     "nyc": "^11.7.1",
     "rewire": "^4.0.1"
   },
+  "sideEffects": false,
   "dependencies": {
     "axios": "^0.18.0"
   },
