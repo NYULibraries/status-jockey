@@ -23,7 +23,7 @@ const applyMaps = (data, maps) =>
 
 const applyCustomFilter = (data, filterFunction) => data.filter(filterFunction);
 
-function applyFilter(filterKey, data, filterConfig) {
+export function applyFilter(filterKey, data, filterConfig) {
   return {
     filterByStatus: applyStatusFilter,
     customFilter: applyCustomFilter,
@@ -31,5 +31,3 @@ function applyFilter(filterKey, data, filterConfig) {
     maps: applyMaps,
   }[filterKey](data, filterConfig);
 }
-
-module.exports = applyFilter;
