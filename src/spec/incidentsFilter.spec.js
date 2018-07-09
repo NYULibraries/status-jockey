@@ -1,4 +1,4 @@
-const incidentsFilter = require('../incidentsFilter');
+const { incidentsFilter } = require('../incidentsFilter');
 
 describe('incidentsFilter', () => {
   const pageConfig = require('./fixtures/config.fixture.js');

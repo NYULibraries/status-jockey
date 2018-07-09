@@ -1,7 +1,8 @@
 const nock = require('nock');
+const configFixture = require('./fixtures/config.fixture.js');
 
 const config = {
-  ...(require('./fixtures/config.fixture.js')),
+  ...configFixture,
   filterByStatus: undefined
 };
 
@@ -9,7 +10,8 @@ const statusApiResponse = require('./fixtures/statusApi.fixture.json');
 const page_id = 'nyulibraries';
 const BASE_API_URL = `https://${page_id}.statuspage.io/api/v2/`;
 
-const statusApi = require('../statusApi')(config);
+const { statusApi } = require('../statusApi');
+const fetchStatusApi = statusApi(config);
 
 describe('statusApi', () => {
   const incidentsResult = [
@@ -39,7 +41,7 @@ describe('statusApi', () => {
     });
 
     it('should transform incidents', (done) => {
-      statusApi({ page_id, type: 'incidents'  }).then((res) => {
+      fetchStatusApi({ page_id, type: 'incidents'  }).then((res) => {
         expect(res).toEqual(incidentsResult);
         done();
       });
@@ -73,7 +75,7 @@ describe('statusApi', () => {
     });
 
     it('should transform scheduled_maintenances', (done) => {
-      statusApi({ page_id: 'nyulibraries', type: 'scheduled-maintenances'}).then((res) => {
+      fetchStatusApi({ page_id: 'nyulibraries', type: 'scheduled-maintenances'}).then((res) => {
         expect(res).toEqual(scheduledMaintenancesResult);
         done();
       });
