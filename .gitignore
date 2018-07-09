@@ -2,3 +2,4 @@ node_modules/
 dist/
 es6/
 .nyc_output/
+*.tgz
