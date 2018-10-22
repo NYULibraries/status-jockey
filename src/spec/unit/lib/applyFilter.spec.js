@@ -1,13 +1,5 @@
-const rewire = require('rewire');
-const allFilters = rewire('../../../lib/applyFilter');
+const filterFunctions = require('../../../lib/filters');
 const data = require('../../fixtures/statuspage-all.fixture.json');
-
-const filterFunctions = {
-  applyStatusFilter: allFilters.__get__('applyStatusFilter'),
-  applyKeysFilter: allFilters.__get__('applyKeysFilter'),
-  applyMaps: allFilters.__get__('applyMaps'),
-  applyCustomFilter: allFilters.__get__('applyCustomFilter')
-};
 
 describe('applyStatusFilter', () => {
   const { applyStatusFilter } = filterFunctions;
