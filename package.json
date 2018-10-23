@@ -1,6 +1,6 @@
 {
   "name": "status-jockey",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Response filter for Statuspage.io API",
   "main": "./dist/index.js",
   "module": "./es6/index.js",
