@@ -2,8 +2,8 @@ const hasStatus = statuses => ({ status }) => statuses.indexOf(status) > -1;
 export const applyStatusFilter = (data, statuses) => data.filter(hasStatus(statuses));
 
 export const applyKeysFilter = (data, keys) => {
-  const keysFilter = keys => obj => Object.entries(obj).reduce(
-    (acc, [k, v]) => keys.indexOf(k) > -1 ? { ...acc, [k]: v } : acc
+  const keysFilter = keys => obj => Object.keys(obj).reduce(
+    (acc, k) => keys.indexOf(k) > -1 ? { ...acc, [k]: obj[k] } : acc
   , {});
 
   return data.map(keysFilter(keys));
@@ -16,8 +16,8 @@ export const applyMaps = (data, maps) => {
     : typeof mapper === 'function' ? mapper(obj)
     : null;
 
-  const mapsApplier = maps => incident => Object.entries(maps).reduce(
-    (acc, [mapKey, mapper]) => ({ ...acc, [mapKey]: applyMap(mapper)(incident) })
+  const mapsApplier = maps => incident => Object.keys(maps).reduce(
+    (acc, mapKey) => ({ ...acc, [mapKey]: applyMap(maps[mapKey])(incident) })
   , incident);
 
   return data.map(mapsApplier(maps));
